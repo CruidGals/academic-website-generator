@@ -27,7 +27,7 @@ def generate_project_sections(data):
         members_html = "".join([f'''
             <div class="member-card">
                 <img src="{member['image']}" alt="{member['name']}">
-                <a href="{member.get('link', '#')}">{member['name']}</a>
+                <a href="{member.get('link', '#')} target="_blank" rel="noopener">{member['name']}</a>
                 {f'<div class="member-role">{member["role"]}</div>' if 'role' in member else ''}
             </div>
         ''' for member in data['members']])
@@ -60,9 +60,19 @@ def generate_project_sections(data):
                     </video>
                 </div>
             ''' for video in data['media']['videos']])
+
+        citation_items = []
+
+        if data['media'].get('citations'):
+            citation_items.extend([f'''
+                <div class="citation-item">{citation['desc']}</div>
+            '''for citation in data['media']['citations']])
             
-        if media_items:
+        if media_items and citation_items:
+            sections.append(f'<div class="project-page-section"><div class="media-grid">{"".join(media_items)}</div><div class="citation-list">{"".join(citation_items)}</div></div>')
+        elif media_items:
             sections.append(f'<div class="project-page-section"><div class="media-grid">{"".join(media_items)}</div></div>')
+
 
     # Publications section
     if data.get('publications'):
@@ -108,4 +118,4 @@ if __name__ == '__main__':
     parser.add_argument("--output_path", type=str, help="Output directory for generated HTML files")
     args = parser.parse_args()
     
-    generate_project_page(args.yml_path, args.out_path)
+    generate_project_page(args.yaml_path, args.output_path)
