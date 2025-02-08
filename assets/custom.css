@@ -425,7 +425,7 @@ colophon { display: none; }
 
 .media-item {
   aspect-ratio: 16/9;
-  overflow: visible;
+  overflow: hidden;
   border-radius: 4px;
 }
 
